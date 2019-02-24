@@ -81,7 +81,7 @@ parser.add_argument("-i", metavar="ip", default="*", help="IP to send in the Via
 parser.add_argument("-d", metavar="domain", default="gekk.info", help="Domain part of the From header (needed if your device filters based on domain)")
 parser.add_argument("-p", metavar="port", default=5060, help="Destination port (default 5060)")
 parser.add_argument("--ttl", metavar="ttl", default=70, help="Value to use for the Max-Forwards field (default 70)")
-parser.add_argument("-w", metavar="file", default="[[default]]", help="File to write results to. (default sipping-logs/[ip] - * to disable.")
+parser.add_argument("-w", metavar="file", default="*", help="File to write results to. (default sipping-logs/[ip] - * to disable.")
 parser.add_argument("-t", metavar="timeout", default="1000", help="Time (ms) to wait for response (default 1000)")
 parser.add_argument("-c", metavar="count", default="1", help="Number of pings to send (default infinite)")
 parser.add_argument("-x", nargs="?", default=False, help="Print raw transmitted packets")
@@ -219,12 +219,15 @@ Content-Length: 0
 		# latency is calculated against this time		
 		end = time.time()
 		diff = float("%.2f" % ((end - start) * 1000.0))
+#		diff_ms = float("%.7f" % ((end - start) * 1.0))
+		diff_ms = float("%.7f" % ((end - start)))
 		
 		# pick out the first line in order to get the SIP response code
 		v_response = data.split("\n")[0]
 		
 		# print success message and response code
-		if not v_quiet: print("< ({time}) Reply OK from {host} ({diff}ms): {response}".format(host=addr[0], diff=diff, time=timef(), response=v_response))
+#		if not v_quiet: print("< ({time}) Reply OK from {host} ({diff}ms): {response}".format(host=addr[0], diff=diff, time=timef(), response=v_response))
+		if not v_quiet: print("SIP 200 OK: {diff_ms} second response time".format(diff_ms=diff_ms))
 
 	        # if -X was passed, print the received packet
         	if v_rawrecv:
